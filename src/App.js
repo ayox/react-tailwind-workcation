@@ -16,7 +16,7 @@ const locations = [
                 title: 'Modern home in city center',
                 price: 190000,
                 reviewCount: 34,
-                rating: 4,
+                rating: 2,
             },
             {
                 imageUrl:
