@@ -9,6 +9,8 @@ function Checkbox(props: IProps) {
             <input
                 className={`form-checkbox bg-${props.background}-900 focus:bg-${props.background}-700`}
                 type="checkbox"
+                checked={props.checked}
+                onChange={props.onChange}
                 name={props.name}
             />
             <span className={`ml-2 text-${props.color}`}>{props.content}</span>

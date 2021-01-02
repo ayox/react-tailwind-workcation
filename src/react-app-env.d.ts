@@ -5,4 +5,7 @@ export interface IBasicComponent {
     color?: string
     background?: string
     content: string | number
+    onClick: any
+    onChange: any
+    checked: boolean
 }

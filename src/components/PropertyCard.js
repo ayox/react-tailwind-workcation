@@ -8,7 +8,7 @@ function formattedPrice(price) {
         currency: 'USD',
     })
 
-    return formatter.format(price / 100)
+    return formatter.format(price / 100/4)
 }
 
 function PropertyCard(props) {

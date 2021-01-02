@@ -3,9 +3,131 @@ import { useToggle } from '../App'
 import Button from './Elements/Button'
 import Checkbox from './Elements/Checkbox'
 import Radio from './Elements/Radio'
+import { useDispatch, useSelector } from 'react-redux'
+import { locationActions } from '../locationSlice'
+
+function RadioGroup() {
+    const dispatch = useDispatch()
+    const value = useSelector((s) => s.filters.reviews)
+
+    function onChange(e) {
+        dispatch(
+            locationActions.updateFilter({
+                filter: 'reviews',
+                value: e.target.value,
+            })
+        )
+    }
+
+    return (
+        <div className="sm:flex sm:-mx-2 lg:block lg:mx-0">
+            <Radio
+                content={'All'}
+                value={'all'}
+                onChange={onChange}
+                checked={'all' === value}
+                name={'reviews'}
+            />
+            <Radio
+                content={'+2'}
+                value={'+2'}
+                onChange={onChange}
+                checked={'+2' === value}
+                name={'reviews'}
+            />
+            <Radio
+                content={'+3'}
+                value={'+3'}
+                onChange={onChange}
+                checked={'+3' === value}
+                name={'reviews'}
+            />
+            <Radio
+                content={'+4'}
+                value={'+4'}
+                onChange={onChange}
+                checked={'+4' === value}
+                name={'reviews'}
+            />
+            <Radio
+                content={'5'}
+                value={'5'}
+                onChange={onChange}
+                checked={'5' === value}
+                name={'reviews'}
+            />
+        </div>
+    )
+}
+
+function CheckBoxGroup() {
+    const dispatch = useDispatch()
+    const value = useSelector((s) => s.filters.amenities)
+
+    function onChange(e) {
+        dispatch(locationActions.updateAmenitiesFilter(e.target.name))
+    }
+
+    return (
+        <div className="sm:flex sm:-mx-2 sm:flex-wrap">
+            <Checkbox
+                onChange={onChange}
+                checked={value === 'any'}
+                name={'any'}
+                content={'Any'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('balcony')}
+                name={'balcony'}
+                content={'Balcony'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('pool')}
+                name={'pool'}
+                content={'Pool'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('beach')}
+                name={'beach'}
+                content={'Beach'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('petFriendly')}
+                name={'petFriendly'}
+                content={'Pet friendly'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('kidFriendly')}
+                name={'kidFriendly'}
+                content={'Kid friendly'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('parking')}
+                name={'parking'}
+                content={'Parking'}
+            />
+            <Checkbox
+                onChange={onChange}
+                checked={value.includes('airConditioning')}
+                name={'airConditioning'}
+                content={'Air Conditioning'}
+            />
+        </div>
+    )
+}
 
 function SearchFilters() {
     const [isOpen, setOpen] = useToggle(false)
+
+    const filters = useSelector((s) => s.filters)
+
+    const dispatch = useDispatch()
 
     return (
         <section className="bg-gray-800 xl:w-72">
@@ -31,7 +153,7 @@ function SearchFilters() {
                     className={`ml-4 inline-flex items-center hover:bg-gray-600 focus:outline-none focus:shadow-outline rounded-lg shadow pl-3 pr-4 ${
                         isOpen ? 'bg-gray-600' : 'bg-gray-700'
                     }`}
-                    onClick={() => setOpen(o => !o)}
+                    onClick={() => setOpen((o) => !o)}
                 >
                     <svg
                         className="h-6 w-6 fill-current text-gray-500"
@@ -55,82 +177,103 @@ function SearchFilters() {
                                 <span className="text-sm font-semibold text-gray-500">
                                     Bedrooms
                                 </span>
-                                <select className="mt-1 form-select block w-full bg-gray-900 text-white shadow focus:bg-gray-600">
-                                    <option>4</option>
+                                <select
+                                    value={filters.bedrooms}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            locationActions.updateFilter({
+                                                filter: 'bedrooms',
+                                                value: e.target.value,
+                                            })
+                                        )
+                                    }}
+                                    className="mt-1 form-select block w-full bg-gray-900 text-white shadow focus:bg-gray-600"
+                                >
+                                    <option value={'all'}>All</option>
+
+                                    <option value={'2'}>2</option>
+                                    <option value={'3'}>3</option>
+                                    <option value={'4'}>4</option>
+                                    <option value={'5'}>5</option>
                                 </select>
                             </label>
                             <label className="block w-1/2 px-2 sm:w-1/4 lg:w-1/2">
                                 <span className="text-sm font-semibold text-gray-500">
                                     Bathrooms
                                 </span>
-                                <select className="mt-1 form-select bg-gray-900 block w-full text-white shadow focus:bg-gray-600">
-                                    <option>2</option>
-                                    <option>3</option>
+                                <select
+                                    value={filters.bathrooms}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            locationActions.updateFilter({
+                                                value: e.target.value,
+                                                filter: 'bathrooms',
+                                            })
+                                        )
+                                    }}
+                                    className="mt-1 form-select bg-gray-900 block w-full text-white shadow focus:bg-gray-600"
+                                >
+                                    <option value={'all'}>All</option>
+
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
                                 </select>
                             </label>
                             <label className="mt-4 block  bg-gray-900w-full px-2 sm:mt-0 sm:w-1/2 lg:mt-4 lg:w-full">
                                 <span className="text-sm font-semibold text-gray-500">
                                     Price Range
                                 </span>
-                                <select className="mt-1 bg-gray-900 form-select block w-full text-white shadow focus:bg-gray-600">
-                                    <option>Up to $2,000/wk</option>
+                                <select
+                                    value={filters.priceRange}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            locationActions.updateFilter({
+                                                value: e.target.value,
+                                                filter: 'priceRange',
+                                            })
+                                        )
+                                    }}
+                                    className="mt-1 bg-gray-900 form-select block w-full text-white shadow focus:bg-gray-600"
+                                >
+                                    <option value={'all'}>All</option>
+                                    <option value={'250'}>Up to $250/wk</option>
+                                    <option value={'350'}>Up to $350/wk</option>
+                                    <option value={'500'}>Up to $500/wk</option>
                                 </select>
                             </label>
                         </div>
                     </div>
                     <div className="px-4 py-4 border-t border-gray-900 lg:w-1/3 lg:border-l xl:w-full">
                         <span className="block text-sm font-semibold text-gray-500">
-                            Property Type
+                            Reviews
                         </span>
-                        <div className="sm:flex sm:-mx-2 lg:block lg:mx-0">
-                            <Radio
-                                content={'House'}
-                                value={'house'}
-                                name={'propertyType'}
-                            />
-                            <Radio
-                                content={'Apartment'}
-                                value={'apartment'}
-                                name={'propertyType'}
-                            />
-                            <Radio
-                                content={'Loft'}
-                                value={'loft'}
-                                name={'propertyType'}
-                            />
-                            <Radio
-                                content={'Townhouse'}
-                                value={'townhouse'}
-                                name={'propertyType'}
-                            />
-                        </div>
+                        <RadioGroup />
                     </div>
                     <div className="px-4 py-4 border-t border-gray-900 lg:w-1/3 lg:border-l xl:w-full">
                         <span className="block text-sm font-semibold text-gray-500">
                             Amenities
                         </span>
-                        <div className="sm:flex sm:-mx-2 sm:flex-wrap">
-                            <Checkbox name={'balcony'} content={'Balcony'} />
-                            <Checkbox name={'pool'} content={'Pool'} />
-                            <Checkbox name={'beach'} content={'Beach'} />
-                            <Checkbox
-                                name={'petFriendly'}
-                                content={'Pet friendly'}
-                            />
-                            <Checkbox
-                                name={'kidFriendly'}
-                                content={'Kid friendly'}
-                            />
-                            <Checkbox name={'parking'} content={'Parking'} />
-                            <Checkbox
-                                name={'airConditioning'}
-                                content={'Air Conditioning'}
-                            />
-                        </div>
+                        <CheckBoxGroup />
                     </div>
                 </div>
-                <div className="bg-gray-900 px-4 py-4 sm:text-right">
-                    <Button content={'Update Filter'} background={'blue'} />
+                <div className="bg-gray-900 px-4 py-4 space-y-2 space-x-0 sm:space-x-2 xl:space-x-0 sm:text-right">
+                    <Button
+                        onClick={(e) => {
+                            dispatch(locationActions.filterLocations())
+                        }}
+                        content={'Update Filter'}
+                        background={'blue'}
+                    />
+                    <Button
+                        onClick={(e) => {
+                            dispatch(locationActions.reset())
+                        }}
+                        content={'Reset'}
+                        background={'red'}
+                    />
                 </div>
             </form>
         </section>
